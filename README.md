@@ -4,4 +4,4 @@ This repository contains the reproducible analytical pipeline (RAP) used to crea
 
 ## Methodological note
 
-Classifying a death as drug-related is complex. In Scotland there are two different sets of statistics on the number of drug deaths in Scotland. These suspected drug deaths are classified as such based on an officer’s observations and initial enquiries at the scene of death. Note that these are *NOT* the Official Statistics published by the National Records of Scotland. Instead they are intended to provide an indicator of recent drug death trends in Scotland, to inform prevention and enforcement activities. 
+Classifying a death as drug-related is complex. In Scotland there are two different sets of statistics on the number of drug deaths. The suspected drug deaths reported here are classified as such based on an officer’s observations and initial enquiries at the scene of death. Note that these are *NOT* the Official Statistics published by the National Records of Scotland. Instead they are intended to provide an indicator of recent drug death trends in Scotland, to inform prevention and enforcement activities. 
