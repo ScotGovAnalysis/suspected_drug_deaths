@@ -1,0 +1,240 @@
+---
+title: "Suspected drug deaths in Scotland: Methodology Annex"
+
+output: 
+  word_document:
+    reference_docx: DRDs_briefing_template.docx
+  
+---
+
+```{r setup, include=FALSE }
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      dpi = 300)
+
+##Producing this briefing requires reading in several files:
+#1) Functions - main formatting and tidying of data
+source("C:/Users/u449921/Documents/SuspectedDrugDeaths/Code/1_Functions.R")
+
+#2) Wrangling - prepares the data for analysis
+source("C:/Users/u449921/Documents/SuspectedDrugDeaths/Code/2_Wrangling.R")
+
+#3) Misc_functions - specifically pulls out data for the most recent quarter, and the most recent 12 months
+source("C:/Users/u449921/Documents/SuspectedDrugDeaths/Code/MISC_functions.R")
+
+#############################
+
+#FINALLY - the relevant R script for whichever quarter you're producing the briefing in
+
+source("C:/Users/u449921/Documents/SuspectedDrugDeaths/Code/Q2_Functions.R")
+
+```
+
+## 1. Sources of drug deaths information in Scotland
+
+Classifying a death as drug-related is complex. There are a number of different definitions of drug death, and two different sets of statistics on the number of drug deaths used in Scotland.
+
+### I. National Statistics published annually by National Records of Scotland (NRS)
+
+These are the official figures on the number of drug misuse deaths registered in Scotland each year. Drug misuse deaths are identified using data from death registration records supplemented with information from the Crown Office and Procurator Fiscal Service and forensic pathologists. It covers all deaths with an underlying cause of drug poisoning or drug abuse, but only where any of the substances involved are controlled in the UK. This means that deaths from only e.g. paracetamol or antidepressants are excluded. 
+
+```{r plot1, include=T, fig.dim = c(7,4.5)}
+#reading in data from NRS and appropriate formatting: 
+
+##background table 1 - Summary: https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/drug-related-deaths-in-scotland/2021
+
+library(tidyverse)
+
+##Creating an additional dataset to highlight three points
+NRSdata <- read.csv("C:/Users/u449921/Documents/DRDs_Quarter/Data/NRSdata_trend.csv") %>% 
+  select(year, Drug.related.deaths, X5.year.average, likely.lower, likely.upper) %>% 
+  pivot_longer(Drug.related.deaths:X5.year.average, names_to = "category", values_to = "total") %>% 
+  mutate(category = case_when(category == "Drug.related.deaths"~ "Drug misuse deaths \nregistered in year", #to wrap legend in chart
+                              T~ "5-year average")) %>% 
+  filter(!is.na(total)) 
+
+##Creating an additional dataset to highlight three points
+NRSdata_select <- NRSdata %>% 
+  filter(year %in% c(1996, 2013, 2021),
+         category != "5-year average")
+
+##plotting
+ggplot(data = NRSdata, aes(x=year, y=total)) +
+  geom_line(aes(linetype = category), size=1) +
+  geom_point(data=NRSdata_select, aes(x=year, y=total), size=3)+ ##with the NRSdata_select dataset from above
+  geom_ribbon(aes(ymin=likely.lower, ymax = likely.upper, fill = str_wrap("Likely Range of Values (due to random variation) around 5-Year Average", 25)),  alpha=.6) +
+  scale_color_manual(values = c("black", "black")) +
+  scale_fill_manual("", values = "#0065bd") +
+  scale_linetype_manual(values = c("dotted", "solid"))+
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.text = element_text(size=12),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x=element_blank(),
+        axis.text.x = element_text(size=12,
+                                   colour = "black"),
+        axis.text.y=element_text(size=12,
+                                 colour = "black"),
+        axis.title=element_text(size=12, 
+                                face = "plain",
+                                colour = "black"),
+        plot.caption = element_text(size=12))+
+  scale_x_continuous(breaks = seq(1996,2021, by=2)) +
+  scale_y_continuous(labels = scales::comma,
+                     limits = c(0,1500, by=500),
+                     expand = c(0,0)) +
+  labs(x="Year",
+       y="Drug misuse deaths",
+       title = "Figure 1: Number of drug misuse deaths in Scotland, 1996 to 2021",
+       caption = "Source: National Records of Scotland") +
+  geom_text(aes(label = ifelse(total %in% c(244.0,527.0,1330.0), scales::comma(total, accuracy = 1), "")), vjust=1.5)
+
+```
+
+NRS’s National Statistics [Drug-related deaths in Scotland](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/drug-related-deaths-in-scotland/2021) use this definition, with the most recent publication (July 2022) reporting 1,330 drug misuse deaths for 2021. Although this was a decrease of 1% (9 deaths) on 2020, it was the second largest number recorded since the time series began in 1996 (Figure 1). 
+
+### II. Police Scotland quarterly suspected drug deaths
+  
+This data is sourced from management information from Police Scotland who compile figures on the basis of reports from police officers attending scenes of death. Classification as a suspected drug death is based on an officer’s observations and initial enquiries at the scene of death. Police Scotland record information based on the Ministerial Drugs Task Force definition of a drug-related death, given in their 1994 report. 
+
+Police Scotland monitor suspected drug deaths to inform prevention and enforcement activity. In order to provide a consistent count over time, all deaths originally classified as a ‘suspected drug death’ are included here, irrespective of their eventual final categorisation of cause of death. 
+
+Police Scotland record a suspected drug death against the date on which the death was declared by a qualified medical expert. To give consistent time periods for comparison purposes, an adjustment of ten days (the median delay between the date of death and date of registration over the last five years) has been made when calculating the number of suspected drug deaths in a calendar year quarter. National Records of Scotland statistics use the date of registration of death.
+
+Police Scotland consider the relevant circumstances which relate to all sudden and unexplained deaths. This informs Police Scotland’s subsequent investigation and the official recording of the death as a suspected drug death. Police Scotland records the location of a suspected drug death using the division of where the death occurred, unless the person has been conveyed to a hospital in another division, in which case the death would be recorded as the location where they were found. Each of these locations will be in one of Police Scotland’s thirteen territorial divisional boundaries.
+
+Data validation is conducted by Police Scotland divisional drug death data controllers who confirm and cross-reference detail from the Police Scotland death report with subsequent pathology and toxicology reports.
+
+## 2. Use of Management Information from Police Scotland
+
+The Police Scotland data presented here is Management Information (MI) and *should not be considered as official Police Scotland statistics*. MI is information that is based on administrative data used for operational purposes. It is used in the normal course of business to inform operational activity, prevention and enforcement activity. Whilst any data used goes through a process of quality assurance, MI is not always subject to the same level of validation and checking as Official Statistics. 
+
+However, if used appropriately and with an awareness of the associated caveats, MI can still provide, in some instances, useful insight and intelligence to help inform the public and aid decision making and the development of policy and interventions.
+
+For this publication, the Scottish Government and Police Scotland have agreed that, subject to the caveats on MI described above, it is appropriate to publish the Police Scotland MI data on suspected drug deaths as part of improving the data and information available on current trends in drug deaths in Scotland. 
+
+## 3. Relationship between Police Scotland suspected drug deaths and NRS drug misuse deaths
+
+Police Scotland suspected drug deaths correlate very closely with the NRS drug misuse death death statistics. Figure 2 shows that since the period ending in December 2018, the rolling 12-month Police Scotland figures have ranged from 3% below to 6% above the NRS drug misuse death figures.
+
+```{r plot2, include=T, fig.dim = c(7,4.5)}
+#requires joining Police Scotland and NRS data
+
+#Police Scotland data
+joina <- PoliceDivision %>% 
+  filter(division == "Total") 
+
+###having to manually input variables from NRS, as this was not in background tables of publication: #https://erdm.scotland.gov.uk:8443/documents/A36357868/details
+#https://erdm.scotland.gov.uk:8443/documents/A40037257/details
+#not ideal, but to quote a noted scholar, "...we are where we are.......!"
+joinb <- data.frame(NRS= c(207	,
+233	,
+240	,
+254	,
+283	,
+341	,
+274	,
+289	,
+359	,
+316	,
+306	,
+299	,
+306	,
+398	,
+321	,
+314 ,
+391 , 
+339 , 
+314 , 
+286)) %>% 
+  mutate(col = (row_number()+1))
+
+#joining
+comparison_data <- left_join(joina, joinb, by="col")
+
+#creating visual
+comparison_data %>% 
+  mutate(`Police Scotland suspected drug deaths` = zoo::rollapplyr(total2, 4, sum, partial = TRUE),
+         `National Records of Scotland drug-related deaths` = zoo::rollapplyr(NRS, 4, sum, partial = TRUE),
+         month2 = case_when(month == "January-March"~"Jan-Mar",
+                            month == "April-June"~"Apr-Jun",
+                            month == "July-September"~"Jul-Sep",
+                            T~"Oct-Dec"),
+         xaxis = paste(month2, year)) %>% 
+  pivot_longer(`Police Scotland suspected drug deaths`:`National Records of Scotland drug-related deaths`, names_to = "category", values_to = "total" ) %>% 
+  filter(col >4,                  ##Selecting only from October-December 2017 onward
+         !is.na(total)) %>% 
+  ggplot(aes(x=reorder(xaxis,col), y=total))+
+  geom_line(aes(group = category, color= category), size =1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90,
+                                   hjust = .95,
+                                   vjust = .5,
+                                   size=12,
+                                   colour = "black"),
+        axis.text.y=element_text(size=12,
+                                 colour = "black"),
+        axis.title = element_text(size=12, 
+                                  face = "plain",
+                                  colour = "black"),
+        plot.caption = element_text(size=12,
+                                    colour = "black"),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x=element_blank(),
+        panel.grid.minor.y = element_blank()) +
+  scale_y_continuous(labels = scales::comma,
+                     limits = c(0,1600, by=100),
+                     breaks = seq(0,1600, by=200),
+                     expand = c(0,10)) +
+  scale_color_manual(values = c("#999999","#0065bd")) +
+  labs(x="12 month period ending",
+       y="Number of deaths in latest 12 month period",
+       title = "Figure 2: Comparison of Police Scotland suspected drug deaths with NRS \ndrug misuse deaths, October 2017 to June 2022",
+       caption = "Source: National Records of Scotland and Police Scotland") +
+  annotate("text", x=13.25, y=1550, label = "Police Scotland suspected drug deaths", colour = "#0065bd") +
+  annotate("text", x=5, y=1000, label =  "NRS drug misuse deaths", colour = "#999999")
+```
+
+Table 1 below shows how these measures have compared on a calendar-year basis between 2018 and 2021:
+
+```{r table1, include = T }
+
+#wrangling
+table1 <- comparison_data %>% 
+  mutate(Year = year) %>% 
+  select(-year) %>% 
+  group_by(Year) %>% 
+  summarise(`Police Scotland suspected drug deaths` = sum(total2),
+            `NRS drug-related deaths` = sum(NRS)) %>% 
+  mutate(`Proportional difference` = round((`Police Scotland suspected drug deaths`-`NRS drug-related deaths`)/`Police Scotland suspected drug deaths`*100, 0)) %>% 
+  filter(!Year %in% c(2017, 2022)) %>% 
+  pivot_longer(`Police Scotland suspected drug deaths`:`Proportional difference`, names_to = "-", values_to = "total") %>%
+  pivot_wider(names_from = Year, values_from = total) %>% 
+  mutate(`-` = case_when(`-` == "Proportional difference" ~ "Percentage difference between Police Scotland and NRS figures",
+                         T~`-`))
+  
+
+#creating table with Flextable pacakage
+table1 %>% 
+  flextable() %>% 
+  # theme_vanilla() %>% 
+  add_header_row(colwidths = 5,
+                 values = "Table 1: Police Scotland suspected drug deaths and NRS drug-related deaths, 2018 to 2021") %>% 
+  width(j=1, 2.8) %>% 
+  bold(part = 'header') %>% 
+  italic(i=3) %>% 
+  vline(j=c(1,2,3,4), border = officer::fp_border()) %>% 
+  hline(i=2, border = officer::fp_border()) %>% 
+  fontsize(i=1, size =12, part = 'header') %>% 
+  colformat_num(j=c(2,3,4,5 ), digits = 0) %>% 
+  border_outer(border = officer::fp_border()) %>% 
+  add_footer_row(top = F, 
+                 colwidths = 5,
+                 values = "Source: NRS and Police Scotland") %>% 
+  align(align = 'right', part='footer') 
+```
+
