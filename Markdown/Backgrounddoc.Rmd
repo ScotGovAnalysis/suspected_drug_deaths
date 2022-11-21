@@ -93,7 +93,7 @@ ggplot(data = NRSdata, aes(x=year, y=total)) +
 
 ```
 
-NRS’s National Statistics [Drug-related deaths in Scotland](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/drug-related-deaths-in-scotland/2021) use this definition, with the most recent publication (July 2022) reporting 1,330 drug misuse deaths for 2021. Although this was a decrease of 1% (9 deaths) on 2020, it was the second largest number recorded since the time series began in 1996 (Figure 1). 
+NRS’s National Statistics publication [Drug-related deaths in Scotland](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/drug-related-deaths-in-scotland/2021) uses this definition, with the most recent release (July 2022) reporting 1,330 drug misuse deaths for 2021. Although this was a decrease of 1% (9 deaths) on 2020, it was the second largest number recorded since the time series began in 1996 (Figure 1). 
 
 ### II. Police Scotland quarterly suspected drug deaths
   
@@ -117,7 +117,7 @@ For this publication, the Scottish Government and Police Scotland have agreed th
 
 ## 3. Relationship between Police Scotland suspected drug deaths and NRS drug misuse deaths
 
-Police Scotland suspected drug deaths correlate very closely with the NRS drug misuse death death statistics. Figure 2 shows that since the period ending in December 2018, the rolling 12-month Police Scotland figures have ranged from 3% below to 6% above the NRS drug misuse death figures.
+Police Scotland suspected drug deaths correlate very closely with the NRS drug misuse death statistics. Figure 2 shows that since the period ending in December 2018, the rolling 12-month Police Scotland figures have ranged from 3% below to 6% above the NRS drug misuse death figures.
 
 ```{r plot2, include=T, fig.dim = c(7,4.5)}
 #requires joining Police Scotland and NRS data
@@ -193,7 +193,7 @@ comparison_data %>%
   scale_color_manual(values = c("#999999","#0065bd")) +
   labs(x="12 month period ending",
        y="Number of deaths in latest 12 month period",
-       title = "Figure 2: Comparison of Police Scotland suspected drug deaths with NRS \ndrug misuse deaths, October 2017 to June 2022",
+       title = "Figure 2: Comparison of Police Scotland suspected drug deaths with NRS \ndrug misuse deaths, October 2017 to September 2022",
        caption = "Source: National Records of Scotland and Police Scotland") +
   annotate("text", x=13.25, y=1550, label = "Police Scotland suspected drug deaths", colour = "#0065bd") +
   annotate("text", x=5, y=1000, label =  "NRS drug misuse deaths", colour = "#999999")
@@ -238,3 +238,11 @@ table1 %>%
   align(align = 'right', part='footer') 
 ```
 
+\newpage
+
+## 4.  Other drug death data and resources
+  * [Drug misuse deaths in Scotland in 2021 (National Records of Scotland)](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/drug-related-deaths-in-scotland/2021)
+  * [Substance use data and intelligence (Public Health Scotland)](https://beta.isdscotland.org/find-publications-and-data/lifestyle-and-behaviours/substance-use/)
+  * [ScotPHO drugs pages (Scottish Public Health Observatory)](https://www.scotpho.org.uk/behaviour/drugs/introduction/)
+  * [Homeless deaths 2020 (National Records of Scotland)](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/homeless-deaths/2020)
+  * [UK drug situation: Focal Point annual report](https://www.gov.uk/government/publications/united-kingdom-drug-situation-focal-point-annual-report)
