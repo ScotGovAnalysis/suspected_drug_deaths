@@ -37,6 +37,28 @@ latest_fig_calendarQ <- PoliceDivision %>%
   head(1) %>% 
   mutate(xaxis = str_replace(xaxis, "-", " to "))
 
+#extracts proportion for same quarter previous year
+propdifference_same_quarter_prev_year <- 
+  abs(round((latest_fig - 
+               (PoliceDivision$total2 %>% 
+                  tail(5) %>% 
+                  head(1)))/ (PoliceDivision$total2 %>% 
+                                tail(5) %>% 
+                                head(1))*100,0))
+
+#extracts difference for same quarter previous year
+difference_same_quarter_prev_year <- 
+  abs(latest_fig - 
+        (PoliceDivision$total2 %>% 
+           tail(5) %>% 
+           head(1)))
+
+#extracts figure of same quarter previous year
+figure_same_quarter_prev_year <- 
+  (PoliceDivision$total2 %>% 
+     tail(5) %>% 
+     head(1))
+
 ################################################################
 ##b)rolling 12 month total
 
