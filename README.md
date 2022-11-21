@@ -1,6 +1,6 @@
 # Suspected drug deaths in Scotland
 
-This repository contains the reproducible analytical pipeline (RAP) used to create the quarterly Suspected Drug Deaths publication. The data is sourced from management information collected by Police Scotland, and a list of previous publications can be found [here][https://www.gov.scot/publications/?term=suspected%20drug%20deaths&cat=filter&begin=01/09/2021&page=1].
+This repository contains the reproducible analytical pipeline (RAP) used to create the quarterly Suspected Drug Deaths publication. The data is sourced from management information collected by Police Scotland, and a list of previous publications can be found [here](https://www.gov.scot/publications/?term=suspected%20drug%20deaths&cat=filter&begin=01/09/2021&page=1).
 
 ## Running the RAP
 
