@@ -164,7 +164,7 @@ comparison_data %>%
                             T~"Oct-Dec"),
          xaxis = paste(month2, year)) %>% 
   pivot_longer(`Police Scotland suspected drug deaths`:`National Records of Scotland drug-related deaths`, names_to = "category", values_to = "total" ) %>% 
-  filter(col >4,                  ##Selecting only from October-December 2017 onward
+  filter(col >4 & col <22,                  ##Selecting only from October-December 2017 onward
          !is.na(total)) %>% 
   ggplot(aes(x=reorder(xaxis,col), y=total))+
   geom_line(aes(group = category, color= category), size =1) +
@@ -193,7 +193,7 @@ comparison_data %>%
   scale_color_manual(values = c("#999999","#0065bd")) +
   labs(x="12 month period ending",
        y="Number of deaths in latest 12 month period",
-       title = "Figure 2: Comparison of Police Scotland suspected drug deaths with NRS \ndrug misuse deaths, October 2017 to September 2022",
+       title = "Figure 2: Comparison of Police Scotland suspected drug deaths with NRS \ndrug misuse deaths, October 2017 to December 2021",
        caption = "Source: National Records of Scotland and Police Scotland") +
   annotate("text", x=13.25, y=1550, label = "Police Scotland suspected drug deaths", colour = "#0065bd") +
   annotate("text", x=5, y=1000, label =  "NRS drug misuse deaths", colour = "#999999")
