@@ -63,8 +63,10 @@ Tabtidying <- function(x){
 ########################################################################
 
 #4). FUNCTION TO CREATE FIG 1
+
 Plot_fun <- function(x){
-  x %>% 
+  df2 <- 
+    x %>% 
     mutate(rolling = zoo::rollapplyr(total2, 4, sum, partial = TRUE),##zoo::rollapplyr is a nifty command for creating rolling totals (in this case, last 4 observations)
            month2 = case_when(month == "January-March"~"Jan-Mar",
                               month == "April-June"~"Apr-Jun",
@@ -77,16 +79,14 @@ Plot_fun <- function(x){
     pivot_longer(total2:rolling, names_to ="category", values_to = "total") %>%     ## 
     filter(division == "Total",                                                     ##
            total !=0) %>%                                                           ##
-    pivot_wider(names_from = category, values_from = total) %>%                     ##These lines are a hacky fix to ensure the line only comes in when there are four months of rolling data
-    ggplot() +
-    geom_col(aes(x=reorder(xaxis,col), y=total2, fill = "Police Scotland suspected drug deaths"))+
-    geom_line(aes(x=reorder(xaxis,col), y=rolling, color = str_wrap("Rolling annual suspected drug deaths (sum of last 4 quarters)", 35)), group=1, size =1) +
+    pivot_wider(names_from = category, values_from = total)                      ##These lines are a hacky fix to ensure the line only comes in when there are four months of rolling data
+  
+  plot <- ggplot(df2) +
+    geom_col(aes(x=reorder(xaxis, col), y=total2, fill = "Police Scotland suspected drug deaths"))+
+    geom_line(aes(x=reorder(xaxis, col), y=rolling, color = str_wrap("Rolling annual suspected drug deaths (sum of last 4 quarters)", 35)), group=1, size =1) +
+    
     theme_bw() +
-    theme(axis.text.x = element_text(angle = 90,
-                                     hjust = .95,
-                                     vjust = .5,
-                                     size=12,
-                                     colour = "black"),
+    theme(axis.text.x = element_blank(),
           axis.text.y=element_text(size=12,
                                    colour = "black"),
           axis.title = element_text(size=12, 
@@ -99,15 +99,81 @@ Plot_fun <- function(x){
           panel.grid.major.x = element_blank(),
           panel.grid.minor.x=element_blank(),
           panel.grid.minor.y = element_blank(),
-          plot.caption = element_text(size=12)) +
+          plot.caption = element_text(size=12, vjust = -4)) +
     labs(x="",
          y="",
-         title = "Figure 1: Number of Police Scotland suspected drug deaths by quarter \nand year, January 2017 to June 2022",      #######NOTE THAT MONTHS IN TITLE WILL NEED TO BE CHANGED DEPENDING ON WHAT QUARTER IT IS
-         caption = "Source: Police Scotland") +
+         title = "Figure 1: Number of Police Scotland suspected drug deaths by quarter \nand year, January 2017 to September 2022",     #######NOTE THAT MONTHS IN TITLE WILL NEED TO BE CHANGED DEPENDING ON WHAT QUARTER IT IS
+         caption = "Note: Q1 is January to March, Q2 is April to June, etc"
+    ) +
     scale_fill_manual(values = "#0065bd") +
     scale_color_manual(values = "black") +
     scale_y_continuous(labels = scales::comma,
-                       limits = c(0,1600, by=200),
+                       limits = c(-1500,1600, by=200),
                        breaks = seq(0,1600, by=200),
-                       expand = c(0,10)) 
+                       expand = c(0,10))  +
+    annotate(geom = "text", x = seq_len(nrow(df2)), y = -50, label = df2$Q, size = 4)+              ##A bunch of horribly fiddly script to format the X axis
+    annotate(geom = "text", x = 2.5 + 4 * (0:5), y = -150, label = unique(df2$year), size = 4) +
+    annotate(geom= "segment", x=4.5, xend=4.5, y=0, yend =-200, color = "black")+
+    annotate(geom= "segment", x=8.5, xend=8.5, y=0, yend =-200, color = "black")+
+    annotate(geom= "segment", x=12.5, xend=12.5, y=0, yend =-200, color = "black")+
+    annotate(geom= "segment", x=16.5, xend=16.5, y=0, yend =-200, color = "black")+
+    annotate(geom= "segment", x=20.5, xend=20.5, y=0, yend =-200, color = "black")+
+    coord_cartesian(ylim =c(0, 1600),  expand=F, clip = "off") 
+  
+  plot_legend <- cowplot::get_legend(plot)                                                          #Extracting legend
+  
+  cowplot::plot_grid(plot+ theme(legend.position = "none"),                                         #Manually placing legend underneath the heavily edited x-axis
+                     plot_legend,
+                     nrow=2,
+                     rel_heights = c(5, 1))
+  
 }
+
+# Plot_fun <- function(x){
+#   x %>% 
+#     mutate(rolling = zoo::rollapplyr(total2, 4, sum, partial = TRUE),##zoo::rollapplyr is a nifty command for creating rolling totals (in this case, last 4 observations)
+#            month2 = case_when(month == "January-March"~"Jan-Mar",
+#                               month == "April-June"~"Apr-Jun",
+#                               month == "July-September"~"Jul-Sep",
+#                               T~"Oct-Dec"),
+#            xaxis = paste(month2, year),
+#            rolling = case_when(rolling<1000 ~ 0,                                    ##
+#                                T~rolling)) %>%                                      ##
+#     select(total2, rolling, everything()) %>%                                       ##
+#     pivot_longer(total2:rolling, names_to ="category", values_to = "total") %>%     ## 
+#     filter(division == "Total",                                                     ##
+#            total !=0) %>%                                                           ##
+#     pivot_wider(names_from = category, values_from = total) %>%                     ##These lines are a hacky fix to ensure the line only comes in when there are four months of rolling data
+#     ggplot() +
+#     geom_col(aes(x=reorder(xaxis,col), y=total2, fill = "Police Scotland suspected drug deaths"))+
+#     geom_line(aes(x=reorder(xaxis,col), y=rolling, color = str_wrap("Rolling annual suspected drug deaths (sum of last 4 quarters)", 35)), group=1, size =1) +
+#     theme_bw() +
+#     theme(axis.text.x = element_text(angle = 90,
+#                                      hjust = .95,
+#                                      vjust = .5,
+#                                      size=12,
+#                                      colour = "black"),
+#           axis.text.y=element_text(size=12,
+#                                    colour = "black"),
+#           axis.title = element_text(size=12, 
+#                                     face = "plain",
+#                                     colour = "black"),
+#           legend.text = element_text(size=12,
+#                                      colour="black"),
+#           legend.position = "bottom",
+#           legend.title = element_blank(),
+#           panel.grid.major.x = element_blank(),
+#           panel.grid.minor.x=element_blank(),
+#           panel.grid.minor.y = element_blank(),
+#           plot.caption = element_text(size=12)) +
+#     labs(x="",
+#          y="",
+#          title = "Figure 1: Number of Police Scotland suspected drug deaths by quarter \nand year, January 2017 to September 2022",      #######NOTE THAT MONTHS IN TITLE WILL NEED TO BE CHANGED DEPENDING ON WHAT QUARTER IT IS
+#          caption = "Source: Police Scotland") +
+#     scale_fill_manual(values = "#0065bd") +
+#     scale_color_manual(values = "black") +
+#     scale_y_continuous(labels = scales::comma,
+#                        limits = c(0,1600, by=200),
+#                        breaks = seq(0,1600, by=200),
+#                        expand = c(0,10)) 
+# }
