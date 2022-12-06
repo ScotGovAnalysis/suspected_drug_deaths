@@ -34,8 +34,8 @@ latest_which <- ifelse(PoliceDivision$total2 %>%  tail(3) %>% sum() > PoliceDivi
 
 #Boolean determining whether aforementioned  change is an increase or decrease with synonym
 latest_which2 <- ifelse(PoliceDivision$total2 %>%  tail(3) %>% sum() > PoliceDivision$total2 %>% tail(7) %>% head(3) %>% sum(), 
-                       "greater", 
-                       "fewer")
+                        "greater", 
+                        "fewer")
 
 #Populates first month of study period (i.e. first month of latest_3Q)
 first_month <- PoliceDivision$month %>% 
@@ -83,13 +83,13 @@ Females <-
 
 #Difference in number of female DRDs in quarter of study and equivalent period over the previous year
 Females_prev <- 
-  Females - Sex$Female %>% tail(7) %>% head(3) %>% sum()
+  abs(Females - Sex$Female %>% tail(7) %>% head(3) %>% sum())
 
 #Proportional change in female DRDs between this year and last
 Females_prop <- 
   abs(round(
     ((Females-Sex$Female %>% tail(7) %>% head(3) %>% sum())/
-       Females*100), 0))
+       Sex$Female %>% tail(7) %>% head(3) %>% sum()*100), 0))
 
 ##boolean for annual increase/decrease in DRDs in females
 Females_which <- ifelse(Females_prev >0, "an increase", "a decrease")
