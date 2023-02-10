@@ -31,15 +31,15 @@ latest_4Q_comparison_prop <-
 
 #Boolean determining whether aforementioned  change is an increase or decrease
 latest_which <- ifelse(
-  (round(((PoliceDivision$total2 %>% tail(4) %>% sum()) - (PoliceDivision$total2 %>% tail(5) %>% head(4) %>% sum())) /
-           (PoliceDivision$total2 %>% tail(5) %>% head(4) %>% sum()) * 100, 1)) >=0, 
+  (round(((PoliceDivision$total2 %>% tail(4) %>% sum()) - (PoliceDivision$total2 %>% tail(8) %>% head(4) %>% sum())) /
+           (PoliceDivision$total2 %>% tail(8) %>% head(4) %>% sum()) * 100, 1)) >=0, 
   "more", 
   "fewer")
 
 #Boolean determining whether aforementioned  change is an increase or decrease with synonym
 latest_which2 <- ifelse(
-  (round(((PoliceDivision$total2 %>% tail(4) %>% sum()) - (PoliceDivision$total2 %>% tail(5) %>% head(4) %>% sum())) /
-           (PoliceDivision$total2 %>% tail(5) %>% head(4) %>% sum()) * 100, 1)) >=0, 
+  (round(((PoliceDivision$total2 %>% tail(4) %>% sum()) - (PoliceDivision$total2 %>% tail(8) %>% head(4) %>% sum())) /
+           (PoliceDivision$total2 %>% tail(8) %>% head(4) %>% sum()) * 100, 1)) >=0, 
   "higher", 
   "lower")
 
@@ -88,7 +88,7 @@ Females <-
 
 #Difference in number of female DRDs in quarter of study and equivalent period over the previous year
 Females_prev <- 
-  Females - Sex$Female %>% tail(8) %>% head(4) %>% sum()
+  abs(Females - Sex$Female %>% tail(8) %>% head(4) %>% sum())
 
 #Proportional change in female DRDs between this year and last
 Females_prop <- 
