@@ -102,8 +102,8 @@ Plot_fun <- function(x){
           plot.caption = element_text(size=12, vjust = -4)) +
     labs(x="",
          y="",
-         title = "Figure 1: Number of Police Scotland suspected drug deaths by quarter \nand year, January 2017 to September 2022",     #######NOTE THAT MONTHS IN TITLE WILL NEED TO BE CHANGED DEPENDING ON WHAT QUARTER IT IS
-         caption = "Note: Q1 is January to March, Q2 is April to June, etc"
+         title = "Figure 1: Number of Police Scotland suspected drug deaths by quarter \nand year, January 2017 to December 2022",     #######NOTE THAT MONTHS IN TITLE WILL NEED TO BE CHANGED DEPENDING ON WHAT QUARTER IT IS
+         caption = "Note: Q1 is January to March, Q2 is April to June, etc\n Source: Police Scotland"
     ) +
     scale_fill_manual(values = "#0065bd") +
     scale_color_manual(values = "black") +
@@ -111,7 +111,7 @@ Plot_fun <- function(x){
                        limits = c(-1500,1600, by=200),
                        breaks = seq(0,1600, by=200),
                        expand = c(0,10))  +
-    annotate(geom = "text", x = seq_len(nrow(df2)), y = -50, label = df2$Q, size = 4)+              ##A bunch of horribly fiddly script to format the X axis
+    annotate(geom = "text", x = seq_len(nrow(df2)), y = -50, label = df2$Q, size = 4)+
     annotate(geom = "text", x = 2.5 + 4 * (0:5), y = -150, label = unique(df2$year), size = 4) +
     annotate(geom= "segment", x=4.5, xend=4.5, y=0, yend =-200, color = "black")+
     annotate(geom= "segment", x=8.5, xend=8.5, y=0, yend =-200, color = "black")+
@@ -120,9 +120,9 @@ Plot_fun <- function(x){
     annotate(geom= "segment", x=20.5, xend=20.5, y=0, yend =-200, color = "black")+
     coord_cartesian(ylim =c(0, 1600),  expand=F, clip = "off") 
   
-  plot_legend <- cowplot::get_legend(plot)                                                          #Extracting legend
+  plot_legend <- cowplot::get_legend(plot)
   
-  cowplot::plot_grid(plot+ theme(legend.position = "none"),                                         #Manually placing legend underneath the heavily edited x-axis
+  cowplot::plot_grid(plot+ theme(legend.position = "none"),
                      plot_legend,
                      nrow=2,
                      rel_heights = c(5, 1))
