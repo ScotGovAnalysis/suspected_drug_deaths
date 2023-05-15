@@ -120,7 +120,7 @@ Age_which <-
 ################################################################
 #POLICE DIVISION
 ranking_PoliceDiv<- PoliceDivision %>% 
-  filter(xaxis =="January-March 2022",
+  filter(xaxis =="January-March 2023",
          division != "Total")  %>% 
   arrange(desc(total2)) %>% 
   head(3) %>%                                             #selecting the highest three values after grouping/summarising (i.e. drug misuse deaths)
