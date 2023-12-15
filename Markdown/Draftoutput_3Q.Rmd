@@ -1,0 +1,115 @@
+---
+title: "Suspected drug deaths in Scotland: July to September 2023"
+
+output: 
+  word_document:
+    reference_docx: DRDs_briefing_template.docx
+  
+---
+
+```{r setup, include=FALSE }
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      dpi = 300)
+
+```
+
+```{r README}
+
+##Producing this briefing requires reading in several files:
+#1) Functions - main formatting and tidying of data
+source("Code/1_Functions.R")
+
+#2) Wrangling - prepares the data for analysis
+source("Code/2_Wrangling.R")
+
+#3) Misc_functions - specifically pulls out data for the most recent quarter, and the most recent 12 months
+source("Code/MISC_functions.R")
+
+#############################
+#############################
+#############################
+#############################
+#############################
+
+#FINALLY - the relevant R script for whichever quarter you're producing the briefing in - THIS IS THE ONLY ONE YOU CHANGE
+
+source("C:/Users/u449921/Documents/SuspectedDrugDeaths/Code/Q3_Functions.R")
+
+
+```
+
+## 1. Background
+
+The Scottish Government has a National Mission to reduce drug deaths and improve the lives of those affected by drugs. This quarterly report presents Police Scotland management information to provide an indication of current trends in drug deaths in Scotland.
+
+## 2. Summary
+
+There were `r latest_fig` suspected drug deaths recorded between `r first_month` and `r last_month` `r year`. This is `r latest_fig_prevQ_prop`% (`r latest_fig_diff`) `r latest_fig_which` than between `r latest_fig_calendarQ` (`r latest_fig_prevQ`). Figure 1 shows that the rolling 12-month suspected drug death total has declined for five consecutive quarters, but still remains high.
+
+**Note** that numbers of suspected drug deaths fluctuate from quarter to quarter. Care should be taken not to interpret movements between individual calendar quarters as indicative of any long term trend.
+
+```{r figure1, include=T, fig.dim = c(7,5)}
+#Derived from the function in 1_Functions.R
+
+PoliceDivision %>% 
+  Plot_fun()
+```
+
+
+## 3. Main points
+
+Between January and `r last_month` `r year`:
+
+  * There were `r latest_3Q` suspected drug deaths, `r latest_3Q_comparison_prop`% (`r latest_3Q_comparison_diff`) `r latest_which2` than during the same period of `r year_prev`;
+  * Males accounted for `r Males_latest`% of suspected drug deaths. This compares with `r Males_prev`% between January and `r last_month` `r year_prev`;
+  * There were `r Females` suspected drug deaths of females, a decrease of `r Females_prop`% (`r Females_prev`) compared to the same period in `r year_prev`;
+  * A majority (`r Age_prop_middleaged`%) of suspected drug deaths were of people aged between 35 and 54. This is broadly in line with previous quarters;
+  * There were `r Age_young` suspected drug deaths in the under 25 age group, `r Age_young_prop`% (`r Age_young_comparison`) `r Age_which` than between January and `r last_month` `r year_prev`;
+  * The Police Divisions with the greatest number of suspected drug deaths were: `r Ranking_PoliceDiv`.
+
+Overall, there were `r rolling12months` suspected drug deaths over the 12 months to `r last_month` `r year`, `r rolling12months_propchange`% (`r rolling12months_absolutechange`) `r rolling12months_which` than the 12 months to `r last_month` `r year_prev`. More detail on the statistics presented above is available in the workbook provided here [ADD HYPERLINK].
+
+
+## 4. Methodology
+
+The data in this report is operational information from Police Scotland who compile figures on the basis of reports from police officers attending scenes of death. This is management information and not subject to the same level of validation and quality assurance as Official Statistics. National Statistics on drug deaths in Scotland are published annually by [National Records of Scotland](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/drug-related-deaths-in-scotland/2021). More information on definitions, data sources, methodology and interpretation of the data, including the historical relationship between suspected drug death figures and drug misuse death statistics, can be found in the Methodology Annex[LINK].
+
+## 5. Next update
+
+The next ‘Suspected drug deaths in Scotland’ quarterly report will be published in December 2022, reporting on deaths up to September 2022.
+
+The next annual drug misuse deaths publication from NRS is due to be released in Summer 2023.
+
+\newpage
+
+### Accessing help and support for problem drug use
+If you or anyone you know is affected by drug use, support is available via the following organisations:
+
+  * [Scottish Drugs Forum](https://www.sdf.org.uk/)
+  * [Scottish Families Affected by Alcohol & Drugs](https://www.sfad.org.uk/service-directory)
+  * [Know the Score](https://www.knowthescore.info/)
+  * [We Are With You](https://www.wearewithyou.org.uk/)
+
+### Other drug death data and resources
+  * [Drug misuse deaths in Scotland in 2021 (National Records of Scotland)](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/drug-related-deaths-in-scotland/2021)
+  * [Substance use data and intelligence (Public Health Scotland)](https://beta.isdscotland.org/find-publications-and-data/lifestyle-and-behaviours/substance-use/)
+  * [ScotPHO drugs pages (Scottish Public Health Observatory)](https://www.scotpho.org.uk/behaviour/drugs/introduction/)
+  * [Homeless deaths 2020 (National Records of Scotland)](https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/deaths/homeless-deaths/2020)
+  * [UK drug situation: Focal Point annual report](https://www.gov.uk/government/publications/united-kingdom-drug-situation-focal-point-annual-report)
+
+  
+### Correspondence and enquiries
+
+For enquiries about this publication please contact:
+
+Population Health Analysis Unit  
+Health & Social Care Analysis  
+E-mail: [HSCAnalysisHub@gov.scot](HSCAnalysisHub@gov.scot)  
+
+For general enquiries about Scottish Government statistics please contact:   
+Office of the Chief Statistician  
+E-mail: [statistics.enquiries@gov.scot](statistics.enquiries@gov.scot)  
+
+Scottish Government welcomes feedback and suggestions on statistical products. Please complete the form [here](https://consult.gov.scot/digital-communications/95832709/) to share your views.
