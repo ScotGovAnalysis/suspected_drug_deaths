@@ -103,7 +103,7 @@ Plot_fun <- function(x){
           plot.caption = element_text(size=12, vjust = -4)) +
     labs(x="",
          y="",
-         title = "Figure 1: Number of Police Scotland suspected drug deaths by quarter \nand year, January 2017 to September 2023",     #######NOTE THAT MONTHS IN TITLE WILL NEED TO BE CHANGED DEPENDING ON WHAT QUARTER IT IS
+         title = "Figure 1: Number of Police Scotland suspected drug deaths by quarter \nand year, January 2017 to December 2023",     #######NOTE THAT MONTHS IN TITLE WILL NEED TO BE CHANGED DEPENDING ON WHAT QUARTER IT IS
          caption = "Note: Q1 is January to March, Q2 is April to June, etc\n Source: Police Scotland"
     ) +
     scale_fill_manual(values = "#0065bd") +
