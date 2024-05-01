@@ -24,8 +24,8 @@ latest_2Q_comparison <-format(as.numeric(PoliceDivision$total2 %>%
 
 #Difference  for current period and same period year previous
 ##NOTE THE COMMA FORMATTING DOES NOT ALLOW ARITHMETIC OPERATIONS OF VARIABLES THEMSELVES, HENCE WRITING THEM OUT AGAIN MANUALLY
-latest_2Q_comparison_diff <- abs((PoliceDivision$total2 %>% tail(6) %>%head(2) %>% sum())) - 
-  (PoliceDivision$total2 %>% tail(2) %>% sum())
+latest_2Q_comparison_diff <- abs((PoliceDivision$total2 %>% tail(6) %>%head(2) %>% sum()) - 
+  (PoliceDivision$total2 %>% tail(2) %>% sum()))
 
 # %change for current rolling period and previous period
 ##AGAIN, COMMA FORMATTING PREVENTS ARITHMETIC OPERATIONS OF VARIABLES ETC
