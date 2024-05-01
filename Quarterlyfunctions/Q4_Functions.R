@@ -21,8 +21,8 @@ latest_4Q_comparison <-
 
 #Difference  for current rolling 12 months and previous rolling 12 month period
 latest_4Q_comparison_diff <-
-  (PoliceDivision$total2 %>% tail(8) %>% head(4) %>% sum()) - 
-  ((PoliceDivision$total2 %>% tail(4) %>% sum()))
+  abs((PoliceDivision$total2 %>% tail(8) %>% head(4) %>% sum()) - 
+  ((PoliceDivision$total2 %>% tail(4) %>% sum())))
 
 # %change for current rolling 12 months and previous rolling 12 month period
 latest_4Q_comparison_prop <-
